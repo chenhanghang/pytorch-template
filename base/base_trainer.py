@@ -14,13 +14,13 @@ class BaseTrainer:
 
         # setup GPU device if available, move model into configured device
         self.device, device_ids = self._prepare_device(config['n_gpu'])
-        self.model = model.to(self.device) # 设置设备
-        if len(device_ids) > 1:# 并行利用gpu
+        self.model = model.to(self.device)  # 设置设备
+        if len(device_ids) > 1:  # 并行利用gpu
             self.model = torch.nn.DataParallel(model, device_ids=device_ids)
 
-        self.criterion = criterion # 损失函数
-        self.metric_ftns = metric_ftns # 评价标准
-        self.optimizer = optimizer # 优化器
+        self.criterion = criterion  # 损失函数
+        self.metric_ftns = metric_ftns  # 评价标准
+        self.optimizer = optimizer  # 优化器
 
         cfg_trainer = config['trainer'] # 训练参数
         self.epochs = cfg_trainer['epochs']

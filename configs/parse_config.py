@@ -52,15 +52,19 @@ class ConfigParser:
     def from_args(cls, args, options=''):
         """
         Initialize this class from some cli arguments. Used in train, test.
+        :return: json 格式
         """
+        # 解析命令行参数
         for opt in options:
             args.add_argument(*opt.flags, default=None, type=opt.type)
         if not isinstance(args, tuple):
-            args = args.parse_args() # 转成args 对象
+            print("dddddddddd")
+            args = args.parse_args()  # 转成args 对象
 
         if args.device is not None:
-            os.environ["CUDA_VISIBLE_DEVICES"] = args.device #设置可用GPU设备
-        if args.resume is not None: #从上模型输出路径恢复一次恢复
+            os.environ["CUDA_VISIBLE_DEVICES"] = args.device  # 设置可用GPU设备
+        # 从上模型输出路径恢复一次恢复，否则从config读取配置文件
+        if args.resume is not None:
             resume = Path(args.resume)
             cfg_fname = resume.parent / 'config.json'
         else:
@@ -68,8 +72,8 @@ class ConfigParser:
             assert args.config is not None, msg_no_cfg
             resume = None
             cfg_fname = Path(args.config)
-        
-        config = read_json(cfg_fname) # 读取配置文件，json格式
+        # 读取配置文件，json格式
+        config = read_json(cfg_fname)
         if args.config and resume:  # 读的之前配置文件，如果指定了当次配置文件，用最新文件更新
             # update new config for fine-tuning
             config.update(read_json(args.config))

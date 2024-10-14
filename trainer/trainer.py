@@ -11,6 +11,9 @@ class Trainer(BaseTrainer):
     """
     def __init__(self, model, criterion, metric_ftns, optimizer, config, data_loader,
                  valid_data_loader=None, lr_scheduler=None, len_epoch=None):
+        """
+        len_epoch: 训练epoch， 默认len_epoch is None，定义data_loader 时候设定
+        """
         super().__init__(model, criterion, metric_ftns, optimizer, config)
         self.config = config
         self.data_loader = data_loader

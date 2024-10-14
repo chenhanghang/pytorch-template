@@ -3,7 +3,7 @@ import collections
 import torch
 import numpy as np
 import data_loader.data_loaders as module_data
-import utils.loss as module_loss
+import models.base.loss as module_loss
 import utils.metric as module_metric
 import models.mnist_model as module_arch
 from configs.parse_config import ConfigParser
@@ -21,7 +21,7 @@ def main(config):
     logger = config.get_logger('train')
     
     # 从配置文件中初始化对象，数据模块
-    data_loader = config.init_obj('data_loader', module_data) #通过config中的名字来指定
+    data_loader = config.init_obj('data_loader', module_data)  # 通过config中的名字来指定
     valid_data_loader = data_loader.split_validation()
 
     # 模型模块,创建模型对象
@@ -40,7 +40,7 @@ def main(config):
     lr_scheduler = config.init_obj('lr_scheduler', torch.optim.lr_scheduler, optimizer)#学习率衰减策略，也不用自己写的
     
     # 训练模型
-    # 1.模型 2.损失函数  3.评价指标  4.优化器  5.数据读取器
+    # 1.模型  2.损失函数  3.评价指标  4.优化器  5.数据读取器
     trainer = Trainer(model, criterion, metrics, optimizer,
                       config=config,
                       data_loader=data_loader,
@@ -60,10 +60,10 @@ if __name__ == '__main__':
                       help='indices of GPUs to enable (default: all)')
 
     # 可以更改json文件中的参数直接用命令的方式
-    CustomArgs = collections.namedtuple('CustomArgs', 'flags type target') #三个属性，flags type target 的对象
+    CustomArgs = collections.namedtuple('CustomArgs', 'flags type target')  # 三个属性，flags type target 的对象
     options = [
         CustomArgs(['--lr', '--learning_rate'], type=float, target='optimizer;args;lr'),
         CustomArgs(['--bs', '--batch_size'], type=int, target='data_loader;args;batch_size')
     ]
     config = ConfigParser.from_args(args, options)
-    main(config)
+    #main(config)
